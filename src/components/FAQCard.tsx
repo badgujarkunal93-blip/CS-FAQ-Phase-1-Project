@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext.js';
 import { Search, ChevronDown, ChevronUp, ThumbsUp, ThumbsDown, Bookmark, MessageSquare, Calendar } from 'lucide-react';
-import { FAQItem, CATEGORIES } from '../data/faqs.js';
+import { FAQItem, CATEGORIES, faqData } from '../data/faqs.js';
 
 interface FAQCardProps {
   initialSearch?: string;
