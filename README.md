@@ -1,5 +1,8 @@
 # 🔮 Yaksha AI — Gamified FAQ Constellation Portal
 
+🌌 **[Live Demo Portal](https://cs-faq-phase-1-project.vercel.app/)**
+
+[![Vercel Deployment](https://img.shields.io/badge/Vercel-Deploy_Live-black.svg?style=for-the-badge&logo=vercel)](https://cs-faq-phase-1-project.vercel.app/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-blue.svg?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
 [![React 19](https://img.shields.io/badge/React-19.0-blue.svg?style=for-the-badge&logo=react)](https://react.dev/)
 [![Tailwind CSS v4](https://img.shields.io/badge/Tailwind_CSS-v4.0-38bdf8.svg?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
