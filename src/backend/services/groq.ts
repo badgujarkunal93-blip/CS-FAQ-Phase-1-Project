@@ -1,9 +1,7 @@
-import Anthropic from '@anthropic-ai/sdk';
 import { prisma } from './db.js';
 
-// Initialize the Anthropic client if key is available
-const apiKey = process.env.ANTHROPIC_API_KEY;
-const anthropic = apiKey ? new Anthropic({ apiKey }) : null;
+// Read API key
+const apiKey = process.env.GROQ_API_KEY;
 
 const SYSTEM_PROMPT = `You are Yaksha, the AI oracle of the Vicharanashala Internship Program at IIT Ropar. 
 You have deep knowledge of all program rules, NOC requirements, ViBe platform rules, Rosetta Journal requirements, team formation rules, stipend policies, and all FAQs. 
@@ -26,7 +24,6 @@ async function getFaqContext(query: string): Promise<string> {
     return keywords.some(kw => qText.includes(kw) || aText.includes(kw) || tagsText.includes(kw));
   });
 
-  // Take top 5 matched, or default to some general FAQs if none match
   const targets = matched.length > 0 ? matched.slice(0, 5) : faqs.slice(0, 5);
   
   return targets
@@ -34,13 +31,11 @@ async function getFaqContext(query: string): Promise<string> {
     .join('\n\n');
 }
 
-// Fallback mystical AI responder in case Claude key is missing or fails
+// Fallback mystical AI responder in case Groq key is missing or fails
 async function getMysticalFallback(query: string, context: string): Promise<string> {
-  // Let's create an answer based on matched FAQs if possible
   const faqs = await prisma.fAQ.findMany();
   const lowerQuery = query.toLowerCase();
   
-  // Try to find direct match
   const bestMatch = faqs.find(faq => {
     const q = faq.question.toLowerCase();
     const t = faq.tags.toLowerCase();
@@ -51,14 +46,13 @@ async function getMysticalFallback(query: string, context: string): Promise<stri
     return `Greetings, Seeker. The cosmic threads reveal the following: ${bestMatch.answer} Keep your gaze steady on the path.`;
   }
 
-  // General fallbacks based on keywords
   if (lowerQuery.includes('noc')) {
     return "Ah, the No Objection Certificate. The oracle sees this: You must upload it via the 'NOC & Documents' block in your User Dashboard by June 10, 2026. A missing NOC shatters the flow of stipend and certificate.";
   }
   if (lowerQuery.includes('stipend') || lowerQuery.includes('paid')) {
     return "Stipends flow to those who complete the weekly Rosetta Journal logs and achieve milestone approvals. The currents release them in the first week of each subsequent month. Satisfy the three participation rules: 85% Zoom presence, 85% response rate, 50% quiz score.";
   }
-  if (lowerQuery.includes('roetta') || lowerQuery.includes('journal') || lowerQuery.includes('logs')) {
+  if (lowerQuery.includes('rosetta') || lowerQuery.includes('journal') || lowerQuery.includes('logs')) {
     return "The Rosetta Journal is your system engineering diary. Record your code commits, readings, and milestones. Submit it every Saturday by 11:59 PM on ViBe, lest the mentors withhold validation of your stipend.";
   }
   if (lowerQuery.includes('vibe') || lowerQuery.includes('platform')) {
@@ -77,32 +71,52 @@ async function getMysticalFallback(query: string, context: string): Promise<stri
 export async function askYaksha(query: string, userId?: string): Promise<string> {
   const context = await getFaqContext(query);
   
-  if (!anthropic) {
-    // If no client, use fallback
+  if (!apiKey) {
+    // If no key, use fallback
     return await getMysticalFallback(query, context);
   }
 
   try {
     const formattedSystem = SYSTEM_PROMPT.replace('{CONTEXT}', context);
-    const message = await anthropic.messages.create({
-      model: 'claude-3-5-sonnet-20241022',
-      max_tokens: 1024,
-      system: formattedSystem,
-      messages: [
-        {
-          role: 'user',
-          content: query
-        }
-      ]
+    
+    // Call Groq API via standard Fetch
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'llama-3.3-70b-versatile',
+        messages: [
+          {
+            role: 'system',
+            content: formattedSystem,
+          },
+          {
+            role: 'user',
+            content: query,
+          }
+        ],
+        temperature: 0.7,
+        max_tokens: 1024,
+      }),
     });
 
-    const responseContent = message.content[0];
-    if (responseContent && responseContent.type === 'text') {
-      return responseContent.text;
+    if (!response.ok) {
+      const errBody = await response.text();
+      console.warn(`Groq API returned error status ${response.status}:`, errBody);
+      return await getMysticalFallback(query, context);
+    }
+
+    const data = await response.json();
+    const reply = data.choices?.[0]?.message?.content;
+    if (reply) {
+      return reply.trim();
     }
     return "The oracle is silent. Try asking in a different manner.";
   } catch (error) {
-    console.error("Error communicating with Claude API:", error);
+    console.error("Error communicating with Groq API:", error);
     return await getMysticalFallback(query, context);
   }
 }

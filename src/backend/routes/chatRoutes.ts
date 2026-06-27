@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import rateLimit from 'express-rate-limit';
 import { prisma } from '../services/db.js';
-import { askYaksha } from '../services/claude.js';
+import { askYaksha } from '../services/groq.js';
 import { requireAuth, AuthRequest } from '../middleware/auth.js';
 import { evaluateBadges } from './userRoutes.js';
 

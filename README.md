@@ -4,7 +4,7 @@
 [![React 19](https://img.shields.io/badge/React-19.0-blue.svg?style=for-the-badge&logo=react)](https://react.dev/)
 [![Tailwind CSS v4](https://img.shields.io/badge/Tailwind_CSS-v4.1-38bdf8.svg?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
 [![Three.js](https://img.shields.io/badge/Three.js-0.160-black.svg?style=for-the-badge&logo=three.js)](https://threejs.org/)
-[![Claude AI](https://img.shields.io/badge/Claude_AI-Sonnet_3.5-orange.svg?style=for-the-badge&logo=anthropic)](https://www.anthropic.com/)
+[![Groq AI](https://img.shields.io/badge/Groq_AI-Llama_3.3-orange.svg?style=for-the-badge&logo=openai)](https://console.groq.com/)
 [![Vite](https://img.shields.io/badge/Vite-6.2-646CFF.svg?style=for-the-badge&logo=vite)](https://vitejs.dev/)
 
 Yaksha's Lair is a premium, full-stack, gamified FAQ portal designed for the **Vicharanashala Internship Program at IIT Ropar**. It provides an interactive space theme that transforms flat documentation reading into a gaming-style experience.
@@ -15,7 +15,7 @@ Yaksha's Lair is a premium, full-stack, gamified FAQ portal designed for the **V
 
 - **⚛️ 3D FAQ Knowledge Graph**: A full-scale interactive coordinate network built in Three.js where FAQ articles float as glowing nodes clustered by category. Hover to inspect tooltips; click nodes to expand cards.
 - **🛡️ 3D Yaksha Avatar**: A spinning, dual-layered wireframe sacred geometry shapes core that pulses during AI thinking states and swells during voice transmissions.
-- **🔮 Claude AI Oracle**: Dynamic, context-matching AI chatbot powered by Anthropic's Claude-3.5-Sonnet, fed with internal guidelines regarding NOC policies, stipend conditions, and team setups.
+- **🔮 Groq AI Oracle**: Dynamic, context-matching AI chatbot powered by Groq's Llama-3.3-70b, fed with internal guidelines regarding NOC policies, stipend conditions, and team setups.
 - **🏆 Spurti XP Gamification**: Ranks (Seeker → Scholar → Sage → Oracle), dynamic leveling bars, streaking mechanisms, and a live leaderboard featuring anonymity toggles.
 - **🏅 Achievement Reliquary**: Automatic unlocks for items like *First Question*, *Bookworm* (10 bookmarks), *Oracle's Favorite* (50 chat messages), and *FAQ Hunter* (reading all 24 FAQs).
 - **🎙️ Speech Synthesis & Recognition**: Real-time microphone capture transcribing spoken inputs and reading response texts back using the browser Web Speech engine, complete with live Canvas waves.
@@ -63,10 +63,10 @@ graph TD
 3. Create the `.env` file:
    ```bash
    cp .env.example .env
-   # Add your ANTHROPIC_API_KEY inside the .env file
+   # Add your GROQ_API_KEY and DATABASE_URL inside the .env file
    ```
 
-4. Build and seed the SQLite database:
+4. Build and seed the PostgreSQL database:
    ```bash
    npm run setup
    ```
