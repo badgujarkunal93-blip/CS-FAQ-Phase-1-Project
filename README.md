@@ -1,153 +1,168 @@
-# 🔮 Yaksha's Lair — Vicharanashala FAQ Portal
+# 🔮 Yaksha AI — Gamified FAQ Constellation Portal
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-blue.svg?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
 [![React 19](https://img.shields.io/badge/React-19.0-blue.svg?style=for-the-badge&logo=react)](https://react.dev/)
-[![Tailwind CSS v4](https://img.shields.io/badge/Tailwind_CSS-v4.1-38bdf8.svg?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
+[![Tailwind CSS v4](https://img.shields.io/badge/Tailwind_CSS-v4.0-38bdf8.svg?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
 [![Three.js](https://img.shields.io/badge/Three.js-0.160-black.svg?style=for-the-badge&logo=three.js)](https://threejs.org/)
 [![Groq AI](https://img.shields.io/badge/Groq_AI-Llama_3.3-orange.svg?style=for-the-badge&logo=openai)](https://console.groq.com/)
-[![Vite](https://img.shields.io/badge/Vite-6.2-646CFF.svg?style=for-the-badge&logo=vite)](https://vitejs.dev/)
+[![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-green.svg?style=for-the-badge&logo=supabase)](https://supabase.com/)
+[![Prisma](https://img.shields.io/badge/Prisma-ORM-2D3748.svg?style=for-the-badge&logo=prisma)](https://www.prisma.io/)
 
-Yaksha's Lair is a premium, full-stack, gamified FAQ portal designed for the **Vicharanashala Internship Program at IIT Ropar**. It provides an interactive space theme that transforms flat documentation reading into a gaming-style experience.
+Yaksha AI is a premium, full-stack, gamified FAQ portal designed for the **Vicharanashala Internship Program at IIT Ropar**. It moves away from boring, flat text documentation by wrapping FAQ searches inside an interactive space-themed dashboard complete with a 3D coordinate graph, real-time voice synthesis, a live database, and gamification streaks.
+
+---
+
+## 🛠️ Architecture Blueprint
+
+The application employs a decoupled client-server architecture powered by a persistent database connection:
+
+```mermaid
+graph TD
+    %% Frontend Components
+    subgraph Client [Vite + React 19 Frontend]
+        UI[TopNavbar / Navigation]
+        Graph[3D FAQ Graph - Three.js/R3F]
+        Chat[Chat Panel - Yaksha AI]
+        Voice[Voice Portal - Speech API]
+        Spurti[Profile Dashboard - XP / Badges]
+    end
+
+    %% Backend Components
+    subgraph Server [Express.js Backend Engine]
+        API[API Router / Middleware]
+        Limiter[Rate Limiters - express-rate-limit]
+        Auth[JWT Cookie Guardian]
+    end
+
+    %% Integrations
+    subgraph Services [Cloud Integrations]
+        Postgres[(Supabase PostgreSQL)]
+        Groq[Groq API - Llama 3.3 RAG]
+    end
+
+    %% Connections
+    UI --> API
+    Chat -->|POST /api/chat| API
+    Voice -->|Voice Capture| API
+    Graph -->|Focus ID| UI
+    
+    API --> Auth
+    API -->|Prisma Client| Postgres
+    API -->|Fetch Context| Groq
+    
+    style Graph fill:#0b0f19,stroke:#06b6d4,stroke-width:2px
+    style Chat fill:#0b0f19,stroke:#7c3aed,stroke-width:2px
+    style Postgres fill:#071c14,stroke:#3ecf8e,stroke-width:2px
+    style Groq fill:#1f1307,stroke:#f97316,stroke-width:2px
+```
 
 ---
 
 ## 🌌 Feature Matrix
 
-- **⚛️ 3D FAQ Knowledge Graph**: A full-scale interactive coordinate network built in Three.js where FAQ articles float as glowing nodes clustered by category. Hover to inspect tooltips; click nodes to expand cards.
-- **🛡️ 3D Yaksha Avatar**: A spinning, dual-layered wireframe sacred geometry shapes core that pulses during AI thinking states and swells during voice transmissions.
-- **🔮 Groq AI Oracle**: Dynamic, context-matching AI chatbot powered by Groq's Llama-3.3-70b, fed with internal guidelines regarding NOC policies, stipend conditions, and team setups.
-- **🏆 Spurti XP Gamification**: Ranks (Seeker → Scholar → Sage → Oracle), dynamic leveling bars, streaking mechanisms, and a live leaderboard featuring anonymity toggles.
-- **🏅 Achievement Reliquary**: Automatic unlocks for items like *First Question*, *Bookworm* (10 bookmarks), *Oracle's Favorite* (50 chat messages), and *FAQ Hunter* (reading all 24 FAQs).
-- **🎙️ Speech Synthesis & Recognition**: Real-time microphone capture transcribing spoken inputs and reading response texts back using the browser Web Speech engine, complete with live Canvas waves.
-- **📊 Admin Council Panel**: Administrative statistics panels, FAQ compilation models, member contribution reviews, and suggestions moderation queue.
+- **⚛️ 3D FAQ Knowledge Graph**: A coordinates constellation built in Three.js where FAQ articles float as glowing nodes clustered by category. Includes OrbitControls (drag to rotate, scroll to zoom, hover/click nodes).
+- **🧠 Interactive RAG Citations**: When querying Yaksha AI, clickable source badges (e.g. `[FAQ-005]`) are returned under responses. Clicking a source tab pisses the viewport to the 3D FAQ tab and zooms the camera directly onto the target node.
+- **🔮 Yaksha AI Chatbot**: Context-matching, RAG-augmented chatbot powered by Groq's `llama-3.3-70b-versatile`. It has deep knowledge of NOC policies, stipends, Rosetta logs, and team structures, with local keywords fallback if offline.
+- **🎙️ Voice Yaksha Portal**: Hands-free verbal interaction using the Web Speech API (speech recognition input and text-to-speech feedback) complete with a live Canvas frequency visualizer.
+- **🏆 Spurti XP Gamification**: Ranks (Seeker ➔ Scholar ➔ Sage ➔ Oracle), dynamic level bars, streaking mechanisms, and a live cohort leaderboard with disclosure anonymity toggles.
+- **🏅 Achievement Reliquary**: Automatic badge unlock conditions:
+  - `🌱 First Question` (starter badge).
+  - `📚 Bookworm` (saved 10 bookmarks in FAQ explorer).
+  - `🔮 Yaksha's Favorite` (sent 50 chat messages to Yaksha).
+  - `🎯 FAQ Hunter` (read all 24 official FAQs).
+- **📊 Admin Council Panel**: Administrative statistics aggregates, FAQ CRUD controls, and a suggestion moderation queue for user suggestions.
 
 ---
 
-## 📐 Architecture Diagram
+## 📁 Repository Structure
 
-```mermaid
-graph TD
-  User([Browser Client]) -->|React 19 SPA| Router[App Router]
-  Router --> R3F[Three.js / React Three Fiber / OrbitControls]
-  Router --> Voice[Web Speech Transcription & SpeechSynthesis]
-  Router --> AuthContext[Auth & Gamification Context]
-  
-  AuthContext -->|API Calls / Cookies| Express[Express Server]
-  Express -->|Security Layers| Helmet[Helmet / CORS / Rate Limiter]
-  Express -->|ORM| Prisma[Prisma Client]
-  Prisma -->|Storage| SQLite[(SQLite Database dev.db)]
-  
-  Express -->|Services| Claude[Anthropic Claude API]
+```text
+Vicharanshala/
+├── prisma/
+│   ├── schema.prisma      # Supabase PostgreSQL relational schema
+│   └── seed.ts            # Seeding script for 24 FAQs & Admin user
+├── src/
+│   ├── backend/           # Server controllers & routes
+│   │   ├── routes/        # Auth, FAQs, Chat, Leaderboards, Admin
+│   │   └── services/      # Prisma DB client & Groq LLM API client
+│   ├── components/        # React 3D & UI components
+│   │   ├── ThreeScene.tsx      # Interactive 3D particle background
+│   │   ├── YakshaAvatar.tsx    # Pulsing 3D geometric wireframe avatar
+│   │   ├── KnowledgeGraph.tsx  # 3D Three.js FAQ coordinate graph
+│   │   └── ChatInterface.tsx   # Yaksha Chat with RAG citations
+│   ├── context/           # Auth & offline fallback state providers
+│   └── App.tsx            # Navigation coordinator & dashboard layouts
+├── server.ts              # Express server bootstrap (bundling entry)
+└── index.html             # HTML mounting viewport
 ```
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Quick Setup & Seeding
 
-### Prerequisites
-- Node.js (v18+)
-- NPM
+### 1. Prerequisites
+- **Node.js**: Version 18+ (supporting global `fetch`).
+- **PostgreSQL Database**: Setup a free database project on [Supabase](https://supabase.com/).
+- **Groq API Key**: Create a free key in the [Groq Console](https://console.groq.com/).
 
-### Installation
+### 2. Installation
+Clone the repository and install the dependencies:
+```bash
+git clone https://github.com/badgujarkunal93-blip/CS-FAQ-Phase-1-Project.git
+cd Vicharanshala
+npm install --legacy-peer-deps
+```
 
-1. Navigate to the `Vicharanshala` folder:
-   ```bash
-   cd Vicharanshala
-   ```
+### 3. Environment Setup
+Create a `.env` file in the root of the `Vicharanshala` directory:
+```env
+PORT=5000
+JWT_SECRET="your_custom_jwt_secret_key"
+GROQ_API_KEY="your_groq_api_key"
 
-2. Install dependencies:
-   ```bash
-   npm install --legacy-peer-deps
-   ```
+# Supabase database connection string (use port 5432 for initial setup/seeding)
+DATABASE_URL="postgresql://postgres.[PROJECT_REF]:[PASSWORD]@aws-1-ap-south-1.pooler.supabase.com:5432/postgres"
+```
 
-3. Create the `.env` file:
-   ```bash
-   cp .env.example .env
-   # Add your GROQ_API_KEY and DATABASE_URL inside the .env file
-   ```
+### 4. Push Schema & Seed Database
+Connect to your Supabase instance, create the tables, and seed records:
+```bash
+npm run setup
+```
+*(This commands runs `prisma db push` to synchronize Supabase tables, and runs `prisma/seed.ts` to add the default FAQ cards and the admin account).*
 
-4. Build and seed the PostgreSQL database:
-   ```bash
-   npm run setup
-   ```
-
-5. Start the development server:
-   ```bash
-   npm run dev
-   ```
-   *The backend server boots on port `5000` and the Vite dev server boots on port `5173`.*
-
----
-
-## 🔌 API Reference Table
-
-| Route | Method | Access | Description |
-| :--- | :--- | :--- | :--- |
-| `/api/auth/register` | POST | Public | Register new candidate |
-| `/api/auth/login` | POST | Public | Authenticate user, issue HTTP-only cookie, check daily login streak |
-| `/api/auth/logout` | POST | Authenticate | Invalidate session |
-| `/api/faqs` | GET | Public | Fetch all FAQs ordered by popularity index |
-| `/api/faqs` | POST | Admin | Add new FAQ article |
-| `/api/faqs/:id` | PATCH | Admin | Update existing FAQ |
-| `/api/faqs/:id/vote` | POST | Authenticate | Cast upvote/downvote (+2 SP on upvote) |
-| `/api/faqs/:id/bookmark` | POST | Authenticate | Toggle saved bookmarks (+3 SP) |
-| `/api/faqs/suggest` | POST | Authenticate | Submit QA suggestion for queue review |
-| `/api/chat` | POST | Authenticate | Talk to Yaksha AI (Rate limited: 15/min, +10 SP) |
-| `/api/user/spurti` | GET | Authenticate | Fetch user XP, rank limits, recent logs, evaluate badges |
-| `/api/user/activity` | POST | Authenticate | Log user actions (Read FAQ: +5 SP) |
-| `/api/leaderboard` | GET | Public | Fetch top rankings (Masks usernames by default) |
-| `/api/admin/stats` | GET | Admin | Aggregate registrations, FAQ count, and today's chat queries |
-| `/api/admin/queue` | GET | Admin | Retrieve community suggestions queue |
-| `/api/admin/queue/:id/approve`| POST| Admin | Approve suggestion, create FAQ, award author +50 SP |
+### 5. Run Locally
+Launch the Express backend (port 5000) and the Vite frontend (port 5173) simultaneously:
+```bash
+npm run dev
+```
 
 ---
 
-## 🔒 Security Configuration
-
-- **Helmet**: Secures headers and defines strict Content Security Policy directives to block cross-site scripting.
-- **HTTP-Only Cookies**: JWT authentication tokens are stored in `httpOnly` secure cookies to prevent XSS-based session hijacking.
-- **Express-Rate-Limit**: Throttles bot spamming. The `/api/chat` router blocks queries exceeding 15 calls per minute.
-- **Bcrypt**: Hashes passwords using 10 salt rounds.
-- **requireAdmin Middleware**: Blocks non-administrators from accessing statistics or modifying FAQs.
+## 👑 Test Credentials
+Access the admin portal with this pre-seeded account:
+* **Email ID**: `admin@vicharanashala.in`
+* **Password**: `admin123`
 
 ---
 
-## 🎨 Visual Identity Guidelines
+## 🌐 Production Deployment (Vercel)
 
-- **Theme**: Dark Space only (`#050510` deep space canvas).
-- **Accents**: Violet (`#7C3AED`) and Cyan (`#06B6D4`).
-- **Glow**: Transparent overlay glows in blur containers.
-- **Typography**: Heading tags styled in `Space Grotesk`, UI labels and body texts styled in `Inter`.
-
----
-
-## 🛳️ Deployment Guide
-
-### Deploying to Production (Render/Heroku/Vercel)
-
-1. Configure environment variables in host provider dashboard:
-   - `NODE_ENV=production`
-   - `PORT=8080`
-   - `DATABASE_URL=file:./prod.db`
-   - `JWT_SECRET=production_random_secret_string`
-   - `ANTHROPIC_API_KEY=your_live_claude_key`
-
-2. Compile client resources and server:
-   ```bash
-   npm run build
-   ```
-
-3. Perform database push:
-   ```bash
-   npx prisma db push --accept-data-loss
-   npx tsx prisma/seed.ts
-   ```
-
-4. Launch application server:
-   ```bash
-   npm run start
-   ```
+When deploying to Vercel:
+1. Link your GitHub repository.
+2. In the **Environment Variables** section, configure the following:
+   * `DATABASE_URL`: Add your Supabase connection string. *For production, use the Transaction Pooler connection URI on port **6543** with `?pgbouncer=true&connection_limit=1`.*
+   * `GROQ_API_KEY`: Your live Groq API key.
+   * `JWT_SECRET`: Any secure random string (e.g. `yaksha_secret_v2_2026`).
+3. Deploy the application. Vercel will build the frontend assets, launch the Express server handlers, and connect persistently to your cloud database!
 
 ---
 
-*Built by Vicharanshala interns for Vicharanashala Summer 2026.*
+## 🏆 Spurti Rank Progression
+
+| Rank | SP Threshold | Icon |
+| :--- | :--- | :--- |
+| **Seeker** | `0 - 99 SP` | 🪙 |
+| **Scholar** | `100 - 299 SP` | 🛡️ |
+| **Sage** | `300 - 599 SP` | ⚔️ |
+| **Oracle** | `600+ SP` | 👑 |
