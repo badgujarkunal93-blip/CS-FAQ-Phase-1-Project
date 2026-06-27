@@ -11,7 +11,7 @@ const router = Router();
 const chatLimiter = rateLimit({
   windowMs: 60 * 1000, // 1 minute
   max: 15,
-  message: { error: 'The Oracle is cooling down. Please limit questions to 15 per minute.' },
+  message: { error: 'Yaksha AI is cooling down. Please limit questions to 15 per minute.' },
   standardHeaders: true,
   legacyHeaders: false,
   validate: false,
@@ -65,11 +65,11 @@ router.post('/', requireAuth, chatLimiter, async (req: AuthRequest, res) => {
       await prisma.notification.create({
         data: {
           userId,
-          message: `Consulted the Oracle. Earned +10 SP.`,
+          message: `Consulted Yaksha AI. Earned +10 SP.`,
         },
       });
 
-      // Evaluate for "Oracle's Favorite" badge
+      // Evaluate for "Yaksha's Favorite" badge
       await evaluateBadges(userId);
     }
 

@@ -66,7 +66,7 @@ router.post('/register', async (req, res) => {
     await prisma.notification.create({
       data: {
         userId: user.id,
-        message: 'Welcome to Yaksha\'s Lair! Enjoy +20 Spurti Points (SP).',
+        message: 'Welcome to Yaksha AI! Enjoy +20 Spurti Points (SP).',
       },
     });
 

@@ -48,11 +48,11 @@ export async function evaluateBadges(userId: string): Promise<string[]> {
       }
     }
 
-    // Check "Oracle's Favorite" (50 Yaksha messages)
-    if (!newBadges.includes("Oracle's Favorite")) {
+    // Check "Yaksha's Favorite" (50 Yaksha messages)
+    if (!newBadges.includes("Yaksha's Favorite")) {
       const chatMessagesCount = await prisma.chatMessage.count({ where: { userId } });
       if (chatMessagesCount >= 50) {
-        newBadges.push("Oracle's Favorite");
+        newBadges.push("Yaksha's Favorite");
         badgeAdded = true;
         // Award bonus SP (+100 SP)
         await prisma.user.update({
@@ -60,10 +60,10 @@ export async function evaluateBadges(userId: string): Promise<string[]> {
           data: { spurtiPoints: { increment: 100 } },
         });
         await prisma.activityLog.create({
-          data: { userId, action: "Achievement Unlocked: Oracle's Favorite", xpEarned: 100 },
+          data: { userId, action: "Achievement Unlocked: Yaksha's Favorite", xpEarned: 100 },
         });
         await prisma.notification.create({
-          data: { userId, message: '🏆 Badge Unlocked: Oracle\'s Favorite! (Sent 50 messages to Yaksha). Received +100 SP.' },
+          data: { userId, message: '🏆 Badge Unlocked: Yaksha\'s Favorite! (Sent 50 messages to Yaksha). Received +100 SP.' },
         });
       }
     }

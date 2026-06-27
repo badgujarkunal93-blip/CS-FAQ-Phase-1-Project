@@ -103,7 +103,7 @@ export function App() {
                     onClick={() => setCurrentTab('chat')}
                     className="px-5 py-2.5 rounded-lg bg-slate-900 hover:bg-slate-850 text-slate-200 border border-slate-800 text-xs font-bold tracking-wider uppercase transition-all cursor-pointer"
                   >
-                    Ask AI Oracle
+                    Ask Yaksha AI
                   </button>
                 </div>
               </div>
@@ -138,9 +138,9 @@ export function App() {
               >
                 <div className="absolute top-0 right-0 w-24 h-24 bg-[#06B6D4]/5 blur-3xl rounded-full" />
                 <MessageSquare className="text-[#06B6D4] mb-4" size={28} />
-                <h3 className="font-display text-base font-bold text-white mb-2 group-hover:text-cyan-400 transition-colors">Ask Yaksha</h3>
+                <h3 className="font-display text-base font-bold text-white mb-2 group-hover:text-cyan-400 transition-colors">Ask Yaksha AI</h3>
                 <p className="text-slate-450 text-xs font-sans leading-relaxed">
-                  Engage in an immersive context-rich conversation with the Claude-powered AI Oracle of IIT Ropar.
+                  Engage in an immersive context-rich conversation with the Yaksha AI of IIT Ropar.
                 </p>
               </div>
 
@@ -228,7 +228,7 @@ export function App() {
                 </form>
               ) : (
                 <div className="bg-slate-950/80 border border-slate-900/60 p-4 rounded-xl text-center text-slate-500 text-xs">
-                  Please log in (Enter Lair) to suggest FAQs for the queue.
+                  Please log in (Enter Portal) to suggest FAQs for the queue.
                 </div>
               )}
             </div>
@@ -240,7 +240,7 @@ export function App() {
         {currentTab === 'chat' && (
           <div className="py-4 space-y-6">
             <div>
-              <h2 className="font-display text-2xl font-black text-white tracking-wide">AI Oracle Chamber</h2>
+              <h2 className="font-display text-2xl font-black text-white tracking-wide">Yaksha AI Chamber</h2>
               <p className="text-xs text-slate-450 mt-0.5">Consult Yaksha regarding Vicharanashala specifications and logs</p>
             </div>
             <ChatInterface 

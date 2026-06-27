@@ -334,7 +334,7 @@ async function main() {
       isVerified: true,
       spurtiPoints: 1000,
       streak: 5,
-      badges: JSON.stringify(["First Question", "Bookworm", "Oracle's Favorite", "FAQ Hunter"]),
+      badges: JSON.stringify(["First Question", "Bookworm", "Yaksha's Favorite", "FAQ Hunter"]),
     },
   });
 

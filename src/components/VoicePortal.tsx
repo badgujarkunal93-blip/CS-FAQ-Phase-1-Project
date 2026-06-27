@@ -33,7 +33,7 @@ export const VoicePortal: React.FC = () => {
 
       rec.onstart = () => {
         setIsListening(true);
-        setStatusText('Oracle is listening to your voice...');
+        setStatusText('Yaksha is listening to your voice...');
         setTranscript('');
       };
 
@@ -46,7 +46,7 @@ export const VoicePortal: React.FC = () => {
 
       rec.onerror = (e: any) => {
         console.error('Speech Recognition Error:', e);
-        setStatusText('Oracle misunderstood. Try clicking mic to speak again.');
+        setStatusText('Yaksha misunderstood. Try clicking mic to speak again.');
         setIsListening(false);
       };
 
@@ -221,8 +221,8 @@ export const VoicePortal: React.FC = () => {
       // Award +10 SP
       await triggerActivity('Ask Yaksha');
     } catch (e: any) {
-      setResponse(`Error: ${e.message || 'Oracle voice link failed.'}`);
-      setStatusText('Oracle connection severed.');
+      setResponse(`Error: ${e.message || 'Yaksha voice link failed.'}`);
+      setStatusText('Yaksha connection severed.');
     }
   };
 
@@ -265,7 +265,7 @@ export const VoicePortal: React.FC = () => {
       <div>
         <h3 className="font-display font-extrabold text-white text-lg tracking-wide flex items-center justify-center gap-2">
           <Volume2 className="text-[#06B6D4]" size={20} />
-          Voice Oracle Portal
+          Voice Yaksha Portal
         </h3>
         <p className="text-xs text-slate-400 font-sans mt-0.5">
           Hands-free vocal Q&A with Yaksha. Speak naturally.

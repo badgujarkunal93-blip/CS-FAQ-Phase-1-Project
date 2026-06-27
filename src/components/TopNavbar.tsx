@@ -72,12 +72,20 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({ currentTab, setCurrentTab 
                 className="cursor-pointer flex items-center gap-2 group" 
                 onClick={() => setCurrentTab('home')}
               >
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#7C3AED] to-[#06B6D4] flex items-center justify-center font-display font-black text-white shadow-lg shadow-violet-500/25 group-hover:scale-105 transition-transform">
-                  Y
-                </div>
+                <svg className="w-8 h-8 group-hover:rotate-45 transition-transform duration-500 filter drop-shadow-[0_0_6px_rgba(6,182,212,0.4)]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#7C3AED" />
+                      <stop offset="100%" stopColor="#06B6D4" />
+                    </linearGradient>
+                  </defs>
+                  <path d="M12 2L19 9L12 16L5 9L12 2Z" fill="url(#logoGrad)" opacity="0.85"/>
+                  <path d="M12 7L16 11L12 15L8 11L12 7Z" fill="#FFF"/>
+                  <circle cx="12" cy="12" r="9" stroke="url(#logoGrad)" strokeWidth="1.5" strokeDasharray="3 3"/>
+                </svg>
                 <div>
                   <span className="font-display font-bold text-lg text-white tracking-tight group-hover:text-cyan-400 transition-colors">
-                    Yaksha's Lair
+                    Yaksha AI
                   </span>
                   <span className="text-[9px] text-[#06B6D4] font-mono block tracking-widest leading-none font-bold uppercase">
                     Vicharanashala
@@ -184,7 +192,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({ currentTab, setCurrentTab 
                   }}
                   className="bg-gradient-to-r from-[#7C3AED] to-[#06B6D4] text-white px-4 py-1.5 rounded-lg text-xs font-bold hover:shadow-lg hover:shadow-cyan-950/40 transition-all cursor-pointer"
                 >
-                  Enter Lair
+                  Enter Portal
                 </button>
               )}
 
@@ -239,7 +247,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({ currentTab, setCurrentTab 
               {isRegister ? 'Register Candidate' : 'Initiate Session'}
             </h2>
             <p className="text-slate-400 text-xs text-center mb-6">
-              {isRegister ? 'Join the Vicharanashala research network' : 'Present credentials to consult the Yaksha Oracle'}
+              {isRegister ? 'Join the Vicharanashala research network' : 'Present credentials to consult Yaksha AI'}
             </p>
 
             {errorMsg && (

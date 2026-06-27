@@ -182,8 +182,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (action.includes('Bookmark') && !badges.includes('Bookworm') && newPoints > 100) {
           badges.push('Bookworm');
         }
-        if (action === 'Ask Yaksha' && !badges.includes("Oracle's Favorite")) {
-          badges.push("Oracle's Favorite");
+        if (action === 'Ask Yaksha' && !badges.includes("Yaksha's Favorite")) {
+          badges.push("Yaksha's Favorite");
         }
 
         const updatedUser = {
@@ -270,7 +270,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         spurtiPoints: isAdmin ? 1200 : 75,
         streak: 3,
         badges: isAdmin 
-          ? ['First Question', 'Bookworm', 'Oracle\'s Favorite', 'FAQ Hunter'] 
+          ? ['First Question', 'Bookworm', 'Yaksha\'s Favorite', 'FAQ Hunter'] 
           : ['First Question'],
       };
       setUser(mockUser);

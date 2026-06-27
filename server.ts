@@ -69,7 +69,7 @@ if (process.env.NODE_ENV === 'production' || process.env.SERVE_STATIC === 'true'
   });
 } else {
   app.get('/', (req, res) => {
-    res.send('Yaksha\'s Lair API Server is running. Start Vite dev server for frontend.');
+    res.send('Yaksha AI Server is running. Start Vite dev server for frontend.');
   });
 }
 

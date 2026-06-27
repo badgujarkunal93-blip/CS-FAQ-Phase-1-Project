@@ -282,7 +282,7 @@ export const FAQCard: React.FC<FAQCardProps> = ({
                   <div className="px-5 pb-5 pt-1 border-t border-slate-900 bg-slate-950/40 space-y-4">
                     {/* Q&A Text */}
                     <div className="space-y-2.5">
-                      <h5 className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Oracle Response</h5>
+                      <h5 className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Yaksha AI Response</h5>
                       <p className="text-slate-300 text-xs leading-relaxed font-sans whitespace-pre-line">
                         {faq.answer}
                       </p>

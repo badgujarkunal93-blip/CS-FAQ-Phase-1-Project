@@ -59,7 +59,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
   const handleSendMessage = async (text: string) => {
     if (!text.trim()) return;
     if (!user) {
-      setChatError('You must authenticate (Enter Lair) to consult the AI Oracle.');
+      setChatError('You must authenticate (Enter Portal) to consult Yaksha AI.');
       return;
     }
 
@@ -166,13 +166,13 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
       <div className="lg:col-span-4 bg-slate-950/60 rounded-2xl border border-slate-900 flex flex-col items-center justify-center p-6 text-center relative overflow-hidden backdrop-blur-md">
         <div className="absolute top-4 left-4 flex items-center gap-1.5 text-[#06B6D4] font-mono text-[10px] tracking-widest uppercase font-bold">
           <Sparkles size={12} className="animate-spin" />
-          <span>Oracle Core V2.6</span>
+          <span>Yaksha Core V2.6</span>
         </div>
 
         <YakshaAvatar isThinking={isThinking} isResponding={isResponding} className="w-64 h-64" />
 
         <div className="mt-4 space-y-1 z-10">
-          <h3 className="font-display font-extrabold text-white text-base tracking-wide">Yaksha AI Oracle</h3>
+          <h3 className="font-display font-extrabold text-white text-base tracking-wide">Yaksha AI</h3>
           <p className="text-slate-400 text-xs font-sans max-w-xs">
             {isThinking 
               ? 'Deciphering the scrolls of Vicharanashala...' 

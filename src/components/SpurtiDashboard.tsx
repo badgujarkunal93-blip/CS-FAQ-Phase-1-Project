@@ -64,7 +64,7 @@ export const SpurtiDashboard: React.FC = () => {
         <Trophy className="mx-auto text-[#7C3AED]" size={48} />
         <h3 className="font-display text-lg font-bold text-white">Spurti Leaderboards & Profiles</h3>
         <p className="text-slate-450 text-xs font-sans">
-          Authentication is required to track contributions, claim achievement badges, check daily streaks, and view ranks. Enter the lair via the top navbar.
+          Authentication is required to track contributions, claim achievement badges, check daily streaks, and view ranks. Enter the portal via the top navbar.
         </p>
       </div>
     );
@@ -74,7 +74,7 @@ export const SpurtiDashboard: React.FC = () => {
   const BADGES_LIBRARY = [
     {
       name: 'First Question',
-      description: 'Consulted the Yaksha Lair portal registry for the first time.',
+      description: 'Consulted the Yaksha AI portal registry for the first time.',
       requirement: 'Registration welcome award.',
       icon: '🌱'
     },
@@ -85,8 +85,8 @@ export const SpurtiDashboard: React.FC = () => {
       icon: '📚'
     },
     {
-      name: 'Oracle\'s Favorite',
-      description: 'Maintained a deep, ongoing dialogue with the AI Oracle.',
+      name: 'Yaksha\'s Favorite',
+      description: 'Maintained a deep, ongoing dialogue with Yaksha AI.',
       requirement: 'Send 50 messages to Yaksha AI.',
       icon: '🔮'
     },
