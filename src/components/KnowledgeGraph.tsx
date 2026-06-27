@@ -1,11 +1,12 @@
 import React, { useMemo, useState, useRef } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls, Html } from '@react-three/drei';
 import * as THREE from 'three';
 import { faqData, CATEGORIES, FAQItem } from '../data/faqs.js';
 
 interface KnowledgeGraphProps {
   onSelectFAQ: (faq: FAQItem) => void;
+  focusFaqId?: string | null;
 }
 
 // Precalculate 3D centers for the 13 categories
@@ -143,7 +144,51 @@ const ConnectionLine: React.FC<{ points: THREE.Vector3[] }> = ({ points }) => {
   );
 };
 
-export const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ onSelectFAQ }) => {
+// Smooth camera controller component for node zooming
+const CameraController: React.FC<{ focusFaqId: string | null }> = ({ focusFaqId }) => {
+  const { camera, controls } = useThree();
+  const lastFocusId = useRef<string | null>(null);
+  const animProgress = useRef<number>(0);
+
+  React.useEffect(() => {
+    if (focusFaqId) {
+      animProgress.current = 1.0; // Reset animation countdown
+      lastFocusId.current = focusFaqId;
+    }
+  }, [focusFaqId]);
+
+  useFrame(() => {
+    if (animProgress.current > 0 && lastFocusId.current && positionMap[lastFocusId.current]) {
+      const targetPos = positionMap[lastFocusId.current];
+      const orbitControls = controls as any;
+      
+      if (orbitControls && orbitControls.target) {
+        // Smoothly pan OrbitControls target to look at the node
+        orbitControls.target.x = THREE.MathUtils.lerp(orbitControls.target.x, targetPos[0], 0.08);
+        orbitControls.target.y = THREE.MathUtils.lerp(orbitControls.target.y, targetPos[1], 0.08);
+        orbitControls.target.z = THREE.MathUtils.lerp(orbitControls.target.z, targetPos[2], 0.08);
+        
+        // Smoothly zoom camera closer to target node coordinates
+        const targetCamX = targetPos[0];
+        const targetCamY = targetPos[1];
+        const targetCamZ = targetPos[2] + 2.0; // zoom close
+        
+        camera.position.x = THREE.MathUtils.lerp(camera.position.x, targetCamX, 0.08);
+        camera.position.y = THREE.MathUtils.lerp(camera.position.y, targetCamY, 0.08);
+        camera.position.z = THREE.MathUtils.lerp(camera.position.z, targetCamZ, 0.08);
+        
+        orbitControls.update();
+      }
+      
+      // Decrease animation countdown
+      animProgress.current -= 0.015;
+    }
+  });
+
+  return null;
+};
+
+export const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ onSelectFAQ, focusFaqId = null }) => {
   return (
     <div className="w-full h-[550px] relative border border-[#7C3AED]/20 rounded-2xl bg-slate-950/60 overflow-hidden shadow-2xl backdrop-blur-md group-hover:border-[#7C3AED]/40 transition-colors">
       
@@ -169,6 +214,9 @@ export const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ onSelectFAQ }) =
           minDistance={3.5}
           makeDefault
         />
+
+        {/* Focus Controller */}
+        <CameraController focusFaqId={focusFaqId} />
 
         {/* Draw Connections */}
         {connectionLines.map((line) => (

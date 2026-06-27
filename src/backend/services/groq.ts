@@ -11,7 +11,7 @@ Here is the official knowledge base context for Vicharanashala Program:
 {CONTEXT}`;
 
 // Helper to find relevant FAQs locally to build context or for fallback
-async function getFaqContext(query: string): Promise<string> {
+async function getFaqContext(query: string): Promise<{ context: string; faqIds: string[] }> {
   const faqs = await prisma.fAQ.findMany();
   
   // A simple matching filter based on keywords in query
@@ -26,9 +26,12 @@ async function getFaqContext(query: string): Promise<string> {
 
   const targets = matched.length > 0 ? matched.slice(0, 5) : faqs.slice(0, 5);
   
-  return targets
+  const context = targets
     .map(f => `Q: ${f.question}\nA: ${f.answer}`)
     .join('\n\n');
+
+  const faqIds = targets.map(f => f.id);
+  return { context, faqIds };
 }
 
 // Fallback mystical AI responder in case Groq key is missing or fails
@@ -68,12 +71,19 @@ async function getMysticalFallback(query: string, context: string): Promise<stri
   return "The oracle's chamber hums with quiet energy. Your query, '" + query + "', is registered. Seek knowledge in the 3D Knowledge Graph or traditional FAQ listings below, and the truth shall manifest.";
 }
 
-export async function askYaksha(query: string, userId?: string): Promise<string> {
-  const context = await getFaqContext(query);
+export interface YakshaResult {
+  text: string;
+  citations: string[];
+}
+
+export async function askYaksha(query: string, userId?: string): Promise<YakshaResult> {
+  const { context, faqIds } = await getFaqContext(query);
   
   if (!apiKey) {
     // If no key, use fallback
-    return await getMysticalFallback(query, context);
+    const fallbackText = await getMysticalFallback(query, context);
+    // Return the top 2 matched source IDs as citations
+    return { text: fallbackText, citations: faqIds.slice(0, 2) };
   }
 
   try {
@@ -106,17 +116,19 @@ export async function askYaksha(query: string, userId?: string): Promise<string>
     if (!response.ok) {
       const errBody = await response.text();
       console.warn(`Groq API returned error status ${response.status}:`, errBody);
-      return await getMysticalFallback(query, context);
+      const fallbackText = await getMysticalFallback(query, context);
+      return { text: fallbackText, citations: faqIds.slice(0, 2) };
     }
 
     const data = await response.json();
     const reply = data.choices?.[0]?.message?.content;
     if (reply) {
-      return reply.trim();
+      return { text: reply.trim(), citations: faqIds };
     }
-    return "The oracle is silent. Try asking in a different manner.";
+    return { text: "The oracle is silent. Try asking in a different manner.", citations: [] };
   } catch (error) {
     console.error("Error communicating with Groq API:", error);
-    return await getMysticalFallback(query, context);
+    const fallbackText = await getMysticalFallback(query, context);
+    return { text: fallbackText, citations: faqIds.slice(0, 2) };
   }
 }

@@ -32,8 +32,8 @@ router.post('/', requireAuth, chatLimiter, async (req: AuthRequest, res) => {
   }
 
   try {
-    // Call Yaksha Claude AI
-    const reply = await askYaksha(message, userId);
+    // Call Yaksha AI
+    const { text: reply, citations } = await askYaksha(message, userId);
 
     // Record ChatMessage
     await prisma.chatMessage.create({
@@ -73,7 +73,7 @@ router.post('/', requireAuth, chatLimiter, async (req: AuthRequest, res) => {
       await evaluateBadges(userId);
     }
 
-    res.json({ response: reply });
+    res.json({ response: reply, citations });
   } catch (error) {
     console.error('Chat error:', error);
     res.status(500).json({ error: 'Server error processing chat request.' });

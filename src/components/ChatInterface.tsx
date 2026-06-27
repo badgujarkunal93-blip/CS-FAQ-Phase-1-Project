@@ -8,16 +8,19 @@ interface Message {
   sender: 'user' | 'yaksha';
   text: string;
   timestamp: Date;
+  citations?: string[];
 }
 
 interface ChatInterfaceProps {
   initialQuestion?: string;
   clearInitialQuestion?: () => void;
+  onSelectCitation?: (faqId: string) => void;
 }
 
 export const ChatInterface: React.FC<ChatInterfaceProps> = ({ 
   initialQuestion = '', 
-  clearInitialQuestion 
+  clearInitialQuestion,
+  onSelectCitation
 }) => {
   const { user, triggerActivity } = useAuth();
   const [messages, setMessages] = useState<Message[]>([
@@ -83,11 +86,14 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
       });
       
       let replyText = '';
+      let citations: string[] = [];
       if (res.ok) {
         const data = await res.json();
         replyText = data.response;
+        citations = data.citations || [];
       } else {
         replyText = getLocalMysticalResponse(text);
+        citations = extractMockCitations(text);
       }
 
       setIsThinking(false);
@@ -97,7 +103,8 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
         id: `yaksha-${Date.now()}`,
         sender: 'yaksha',
         text: replyText,
-        timestamp: new Date()
+        timestamp: new Date(),
+        citations
       };
 
       setMessages(prev => [...prev, yakshaMsg]);
@@ -115,11 +122,13 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
       setIsResponding(true);
       
       const localReply = getLocalMysticalResponse(text);
+      const mockCitations = extractMockCitations(text);
       const yakshaMsg: Message = {
         id: `yaksha-${Date.now()}`,
         sender: 'yaksha',
         text: localReply,
-        timestamp: new Date()
+        timestamp: new Date(),
+        citations: mockCitations
       };
 
       setMessages(prev => [...prev, yakshaMsg]);
@@ -129,6 +138,21 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
         setIsResponding(false);
       }, 3000);
     }
+  };
+
+  const extractMockCitations = (queryText: string): string[] => {
+    const q = queryText.toLowerCase();
+    const matched: string[] = [];
+    if (q.includes('noc')) matched.push('FAQ-005');
+    if (q.includes('stipend') || q.includes('paid')) matched.push('FAQ-002');
+    if (q.includes('rosetta') || q.includes('journal') || q.includes('log')) matched.push('FAQ-012');
+    if (q.includes('vibe') || q.includes('platform')) matched.push('FAQ-011', 'FAQ-018');
+    if (q.includes('team') || q.includes('size')) matched.push('FAQ-013');
+    if (q.includes('participation') || q.includes('zoom') || q.includes('quiz')) matched.push('FAQ-017');
+    if (q.includes('interview') || q.includes('evaluation')) matched.push('FAQ-014');
+    
+    if (matched.length === 0) matched.push('FAQ-001', 'FAQ-010');
+    return matched;
   };
 
   const getLocalMysticalResponse = (query: string): string => {
@@ -232,6 +256,21 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
                   }`}>
                     {m.text}
                   </div>
+                  {!isUser && m.citations && m.citations.length > 0 && (
+                    <div className="flex flex-wrap gap-1 items-center pt-1.5 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                      <span className="text-[9px] text-slate-500 font-mono font-bold uppercase tracking-wider mr-1">Sources:</span>
+                      {m.citations.map((citeId) => (
+                        <button
+                          key={citeId}
+                          onClick={() => onSelectCitation?.(citeId)}
+                          className="px-1.5 py-0.5 rounded bg-slate-900/80 hover:bg-[#7C3AED]/20 border border-slate-800 hover:border-cyan-400/40 text-[9px] font-mono text-cyan-400 font-bold hover:text-cyan-300 transition-all cursor-pointer"
+                          title="View on 3D Knowledge Graph"
+                        >
+                          {citeId}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                   <span className={`text-[9px] text-slate-500 font-mono block ${isUser ? 'text-right' : ''}`}>
                     {m.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
                   </span>

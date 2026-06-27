@@ -34,6 +34,17 @@ export function App() {
     setSelectedFaqId(faq.id);
   };
 
+  const handleSelectCitation = (faqId: string) => {
+    setSelectedFaqId(faqId);
+    setCurrentTab('faqs');
+    setTimeout(() => {
+      const container = document.getElementById('faqs-container');
+      if (container) {
+        container.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 100);
+  };
+
   const handleSuggestSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!suggestQuestion || !suggestAnswer) return;
@@ -163,14 +174,14 @@ export function App() {
 
         {/* ================= 2. FAQ EXPLORER TAB ================= */}
         {currentTab === 'faqs' && (
-          <div className="space-y-10 py-4">
+          <div id="faqs-container" className="space-y-10 py-4">
             <div>
               <h2 className="font-display text-2xl font-black text-white tracking-wide">FAQ Knowledge Network</h2>
               <p className="text-xs text-slate-450 mt-0.5">Interact with the 3D FAQ constellation nodes or search the catalog below</p>
             </div>
 
             {/* 3D Knowledge Graph Constellation */}
-            <KnowledgeGraph onSelectFAQ={handleSelectFaqFromGraph} />
+            <KnowledgeGraph onSelectFAQ={handleSelectFaqFromGraph} focusFaqId={selectedFaqId} />
 
             {/* Searchable Listing fallback */}
             <FAQCard 
@@ -246,6 +257,7 @@ export function App() {
             <ChatInterface 
               initialQuestion={chatPreFill} 
               clearInitialQuestion={() => setChatPreFill('')} 
+              onSelectCitation={handleSelectCitation}
             />
           </div>
         )}
